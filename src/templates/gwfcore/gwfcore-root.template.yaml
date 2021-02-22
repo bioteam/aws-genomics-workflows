@@ -250,35 +250,35 @@ Resources:
       Value: !Sub ${BatchStack.Outputs.PriorityJobQueueArn} #required
       Description: GWFCore Priority AWS Batch Job Queue
   
-  ParamAdditionsRepoName:
-    Type: "AWS::SSM::Parameter"
-    Properties:
-      Name: 
-        Fn::Sub:
-          - /gwfcore/${namespace}/additions-repository/name
-          - namespace: 
-              Fn::If:
-                - NoNamespace
-                - !Sub ${AWS::StackName}
-                - !Ref Namespace
-      Type: String #required
-      Value: !Sub ${CodeStack.Outputs.EcsAdditionsRepoName} #required
-      Description: GWFCore ECS Additions Repository Name
-  
-  ParamAdditionsRepoCloneUrlHttp:
-    Type: "AWS::SSM::Parameter"
-    Properties:
-      Name: 
-        Fn::Sub:
-          - /gwfcore/${namespace}/additions-repository/clone-url-http
-          - namespace: 
-              Fn::If:
-                - NoNamespace
-                - !Sub ${AWS::StackName}
-                - !Ref Namespace
-      Type: String #required
-      Value: !Sub ${CodeStack.Outputs.EcsAdditionsRepoCloneUrlHttp} #required
-      Description: GWFCore ECS Additions Repository HTTP Clone Url
+#  ParamAdditionsRepoName:
+#    Type: "AWS::SSM::Parameter"
+#    Properties:
+#      Name: 
+#        Fn::Sub:
+#          - /gwfcore/${namespace}/additions-repository/name
+#          - namespace: 
+#              Fn::If:
+#                - NoNamespace
+#                - !Sub ${AWS::StackName}
+#                - !Ref Namespace
+#      Type: String #required
+#      Value: !Sub ${CodeStack.Outputs.EcsAdditionsRepoName} #required
+#      Description: GWFCore ECS Additions Repository Name
+#  
+#  ParamAdditionsRepoCloneUrlHttp:
+#    Type: "AWS::SSM::Parameter"
+#    Properties:
+#      Name: 
+#        Fn::Sub:
+#          - /gwfcore/${namespace}/additions-repository/clone-url-http
+#          - namespace: 
+#              Fn::If:
+#                - NoNamespace
+#                - !Sub ${AWS::StackName}
+#                - !Ref Namespace
+#      Type: String #required
+#      Value: !Sub ${CodeStack.Outputs.EcsAdditionsRepoCloneUrlHttp} #required
+#      Description: GWFCore ECS Additions Repository HTTP Clone Url
   
   ParamInstalledArtifactsBucket:
     Type: "AWS::SSM::Parameter"
@@ -292,7 +292,7 @@ Resources:
                 - !Sub ${AWS::StackName}
                 - !Ref Namespace
       Type: String #required
-      Value: !Sub ${CodeStack.Outputs.InstalledArtifactsBucket} #required
+      Value: !Ref ArtifactBucketName
       Description: GWFCore S3 Bucket for Installed Artifacts
   
   ParamInstalledArtifactsPrefix:
@@ -307,7 +307,7 @@ Resources:
                 - !Sub ${AWS::StackName}
                 - !Ref Namespace
       Type: String #required
-      Value: !Sub ${CodeStack.Outputs.InstalledArtifactsPrefix} #required
+      Value: !Ref ArtifactBucketPrefix
       Description: GWFCore S3 Prefix for Installed Artifacts
   
   ParamInstalledArtifactsS3RootUrl:
@@ -322,7 +322,7 @@ Resources:
                 - !Sub ${AWS::StackName}
                 - !Ref Namespace
       Type: String #required
-      Value: !Sub ${CodeStack.Outputs.InstalledArtifactsS3RootUrl} #required
+      Value: !Sub "s3://${ArtifactBucketName}/${ArtifactBucketPrefix}"
       Description: GWFCore S3 Root Url for Installed Artifacts
 
 Outputs:
@@ -340,10 +340,10 @@ Outputs:
     Value: !Ref ParamDefaultJobQueue
   ParamPriorityJobQueue:
     Value: !Ref ParamPriorityJobQueue
-  ParamAdditionsRepoName:
-    Value: !Ref ParamAdditionsRepoName
-  ParamAdditionsRepoCloneUrlHttp:
-    Value: !Ref ParamAdditionsRepoCloneUrlHttp
+#  ParamAdditionsRepoName:
+#    Value: !Ref ParamAdditionsRepoName
+#  ParamAdditionsRepoCloneUrlHttp:
+#    Value: !Ref ParamAdditionsRepoCloneUrlHttp
   ParamInstalledArtifactsBucket:
     Value: !Ref ParamInstalledArtifactsBucket
   ParamInstalledArtifactsPrefix:
