@@ -5,7 +5,7 @@ echo "checking for dependencies"
 DEPENDENCIES=$(cat <<EOF
 curl
 jq
-pip
+pip3
 tar
 zip
 EOF
@@ -85,7 +85,7 @@ for fn in `ls .`; do
     cp -Rv ${SOURCE_PATH}/lambda/$fn/. ${TEMP_PATH}/lambda/$fn
 
     cd ${TEMP_PATH}/lambda/$fn
-    pip install -t . -r requirements.txt
+    pip3 install -t . -r requirements.txt
     zip -r -v $ARTIFACT_PATH/lambda-$fn.zip .
 done
 

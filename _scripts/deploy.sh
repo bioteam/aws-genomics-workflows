@@ -3,12 +3,12 @@
 set -e
 
 bash _scripts/make-dist.sh
-mkdocs build
+#mkdocs build
 
 SITE_BUCKET=s3://docs.opendata.aws/genomics-workflows
 ASSET_BUCKET=s3://aws-genomics-workflows
 ASSET_STAGE=test
-ASSET_PROFILE=asset-publisher
+ASSET_PROFILE=
 DEPLOY_REGION=us-east-1
 
 PARAMS=""
@@ -48,6 +48,9 @@ done
 eval set -- "$PARAMS"
 
 ASSET_STAGE=${1:-$ASSET_STAGE}
+if [[ -n $ASSET_PROFILE ]]; then
+    ASSET_PROFILE="--profile $ASSET_PROFILE"
+fi
 
 function s3_uri() {
     BUCKET=$1
@@ -69,8 +72,7 @@ function s3_sync() {
     echo "   from: $source"
     echo "     to: $destination"
     aws s3 sync \
-        --profile $ASSET_PROFILE \
-        --region $DEPLOY_REGION \
+        $ASSET_PROFILE --region $DEPLOY_REGION \
         --acl public-read \
         --delete \
         --metadata commit=$(git rev-parse HEAD) \
