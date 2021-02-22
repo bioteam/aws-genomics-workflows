@@ -10,6 +10,7 @@ Metadata:
       - Label:
           default: Required
         Parameters:
+          - EnvId
           - S3BucketName
           - ExistingBucket
           - VpcId
@@ -59,6 +60,9 @@ Parameters:
     Type: String
     Description: Optional namespace (e.g. project name) to use to label resources. If not specified the stack-name will be used.
     Default: ""
+  EnvId:
+    Type: String
+    Description: Environment ID to use to label resources.
 
   VpcId:
     Type: AWS::EC2::VPC::Id
@@ -148,19 +152,19 @@ Resources:
             - !Ref Namespace
         S3BucketName: !Sub ${S3Stack.Outputs.BucketName}
   
-  CodeStack:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub ${TemplateRootUrl}/gwfcore/gwfcore-code.template.yaml
-      Parameters:
-        Namespace:
-          Fn::If:
-            - NoNamespace
-            - !Sub ${AWS::StackName}
-            - !Ref Namespace
-        InstallBucketName: !Sub ${S3Stack.Outputs.BucketName}
-        ArtifactBucketName: !Ref ArtifactBucketName
-        ArtifactBucketPrefix: !Ref ArtifactBucketPrefix
+#  CodeStack:
+#    Type: AWS::CloudFormation::Stack
+#    Properties:
+#      TemplateURL: !Sub ${TemplateRootUrl}/gwfcore/gwfcore-code.template.yaml
+#      Parameters:
+#        Namespace:
+#          Fn::If:
+#            - NoNamespace
+#            - !Sub ${AWS::StackName}
+#            - !Ref Namespace
+#        InstallBucketName: !Sub ${S3Stack.Outputs.BucketName}
+#        ArtifactBucketName: !Ref ArtifactBucketName
+#        ArtifactBucketPrefix: !Ref ArtifactBucketPrefix
 
   LaunchTplStack:
     Type: AWS::CloudFormation::Stack
@@ -172,6 +176,7 @@ Resources:
             - NoNamespace
             - !Sub ${AWS::StackName}
             - !Ref Namespace
+        EnvId: !Ref EnvId
   
   BatchStack:
     Type: AWS::CloudFormation::Stack
@@ -187,6 +192,7 @@ Resources:
             - NoNamespace
             - !Sub ${AWS::StackName}
             - !Ref Namespace
+        EnvId: !Ref EnvId
         LaunchTemplateId: !Sub ${LaunchTplStack.Outputs.LaunchTemplateId}
         VpcId: !Ref VpcId
         SubnetIds: !Join [",", !Ref SubnetIds ]

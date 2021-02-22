@@ -49,6 +49,9 @@ Parameters:
   Namespace:
     Type: String
     Description: Namespace (e.g. project name) to use to label resources
+  EnvId:
+    Type: String
+    Description: Environment ID to use to label resources
   VpcId:
     Type: AWS::EC2::VPC::Id
     Description: 'The VPC to create security groups and deploy AWS Batch to. NOTE: Must be the same VPC as the provided subnet IDs.'
@@ -187,6 +190,7 @@ Resources:
         Type: SPOT
         Tags:
           Name: !Sub batch-worker-spot-${Namespace}
+          Env: !Ref EnvId
 
   OnDemandComputeEnv:
     Type: AWS::Batch::ComputeEnvironment
@@ -236,6 +240,7 @@ Resources:
         Type: EC2
         Tags:
           Name: !Sub batch-worker-ondemand-${Namespace}
+          Env: !Ref EnvId
 
   PriorityQueue:
     Type: AWS::Batch::JobQueue

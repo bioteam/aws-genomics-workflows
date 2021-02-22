@@ -19,6 +19,9 @@ Parameters:
   Namespace:
     Type: String
     Description: Namespace (e.g. project name) to use to label resources
+  EnvId:
+    Type: String
+    Description: Environment ID to use to label resources
   LaunchTemplateNamePrefix:
     Type: String
     Default: gwfcore
@@ -67,6 +70,10 @@ Resources:
             Tags:
             - Key: architecture
               Value: !FindInMap ["TagMap", "default", "architecture"]
+          - ResourceType: volume
+            Tags:
+            - Key: Env
+              Value: !Ref EnvId
         BlockDeviceMappings:
           - Ebs:
               DeleteOnTermination: True
