@@ -4,8 +4,7 @@ set -e
 
 bash _scripts/make-dist.sh
 
-mkdocs_path=`command -v mkdocs`
-if [[ -n $mkdocs_path ]]; then
+if command -v mkdocs; then
     mkdocs build
 else
     echo "mkdocs command not found, ignoring"
