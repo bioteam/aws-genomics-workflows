@@ -3,7 +3,13 @@
 set -e
 
 bash _scripts/make-dist.sh
-#mkdocs build
+
+mkdocs_path=`command -v mkdocs`
+if [[ -n $mkdocs_path ]]; then
+    mkdocs build
+else
+    echo "mkdocs command not found, ignoring"
+fi
 
 SITE_BUCKET=s3://docs.opendata.aws/genomics-workflows
 ASSET_BUCKET=s3://aws-genomics-workflows
